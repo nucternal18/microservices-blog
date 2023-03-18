@@ -1,0 +1,59 @@
+apiVersion: skaffold/v4beta3
+kind: Config
+metadata:
+  name: blog
+manifests:
+  rawYaml:
+    - infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: aolausoro/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual: 
+          - src: 'src/**/*.js'
+            dest: .
+    - image: aolausoro/blog-comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual: 
+          - src: '*.js'
+            dest: .
+    - image: aolausoro/blog-posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual: 
+          - src: '*.js'
+            dest: .
+    - image: aolausoro/blog-moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual: 
+          - src: '*.js'
+            dest: .           
+    - image: aolausoro/blog-query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual: 
+          - src: '*.js'
+            dest: .
+    - image: aolausoro/blog-event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual: 
+          - src: '*.js'
+            dest: .
